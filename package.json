@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
-    "clean": "next clean"
+    "lint": "next lint"
   },
   "dependencies": {
     "@google/genai": "^1.17.0",
@@ -23,6 +22,7 @@
     "postcss": "^8.5.6",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
+    "serve": "^14.2.6",
     "tailwind-merge": "^3.3.1",
     "three": "^0.183.2"
   },

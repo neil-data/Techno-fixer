@@ -5,21 +5,88 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
-import { Server, Shield, Cloud, Headphones, BarChart, Code, ArrowRight, Clock, Briefcase, Menu, X } from 'lucide-react';
+import { Server, Shield, Cloud, Headphones, BarChart, Code, ArrowRight, Clock, Briefcase, Menu, X, Bot, Send, Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Page() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
+  const [urgency, setUrgency] = useState<'Normal' | 'Express' | 'Emergency'>('Normal');
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState<Array<{ role: 'bot' | 'user'; text: string }>>([
+    { role: 'bot', text: 'Hi, I am Saarthi. I can help you with pricing, repair timelines, and service selection.' },
+  ]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
   
   const navItems = [
     { name: 'Home', href: '#home' },
     { name: 'Services', href: '#services' },
+    { name: 'Process', href: '#process' },
+    { name: 'Pricing', href: '#pricing' },
     { name: 'About', href: '#about' },
     { name: 'Contact', href: '#contact' }
   ];
+
+  const calculatorCategories = ['All', 'Repair', 'Build', 'Network', 'Security', 'Cloud', 'Enterprise'];
+
+  const calculatorServices = [
+    { id: 'r1', category: 'Repair', name: 'Computer Diagnostic', price: 299, duration: 'Same day' },
+    { id: 'r2', category: 'Repair', name: 'Laptop Screen Repair', price: 1500, duration: '1-2 days' },
+    { id: 'r3', category: 'Repair', name: 'Data Recovery', price: 2500, duration: '2-5 days' },
+    { id: 'b1', category: 'Build', name: 'Custom PC Assembly', price: 2000, duration: '1 day' },
+    { id: 'n1', category: 'Network', name: 'WiFi + Router Setup', price: 1800, duration: 'Same day' },
+    { id: 's1', category: 'Security', name: 'Cybersecurity Audit', price: 4500, duration: '2-4 days' },
+    { id: 'c1', category: 'Cloud', name: 'Cloud Migration Setup', price: 6500, duration: '3-7 days' },
+    { id: 'e1', category: 'Enterprise', name: 'Enterprise IT Support Plan', price: 9000, duration: 'Monthly' },
+  ];
+
+  const filteredCalculatorServices = activeCategory === 'All'
+    ? calculatorServices
+    : calculatorServices.filter((service) => service.category === activeCategory);
+
+  const selectedCalculatorServices = calculatorServices.filter((service) => selectedServiceIds.includes(service.id));
+  const calculatorSubtotal = selectedCalculatorServices.reduce((total, item) => total + item.price, 0);
+  const urgencyMultiplier = urgency === 'Express' ? 1.5 : urgency === 'Emergency' ? 2.0 : 1.0;
+  const calculatorTotal = Math.round(calculatorSubtotal * urgencyMultiplier);
+  const estimateDuration = selectedCalculatorServices.length === 0
+    ? '-'
+    : selectedCalculatorServices.map((item) => item.duration).join(' + ');
+
+  const toggleCalculatorService = (serviceId: string) => {
+    setSelectedServiceIds((current) => current.includes(serviceId)
+      ? current.filter((id) => id !== serviceId)
+      : [...current, serviceId]);
+  };
+
+  const getBotReply = (question: string) => {
+    const q = question.toLowerCase();
+    if (q.includes('price') || q.includes('cost') || q.includes('quote')) {
+      return 'Open the pricing section and select services to get an instant estimate. You can also click WhatsApp Quote for a manual quote.';
+    }
+    if (q.includes('time') || q.includes('duration')) {
+      return 'Most diagnostics and network fixes are same-day. Screen/data/security projects can take 1-5 days depending on complexity.';
+    }
+    if (q.includes('support') || q.includes('enterprise')) {
+      return 'We provide monthly enterprise support plans, proactive monitoring, and emergency on-call support.';
+    }
+    return 'I can help with services, pricing, timeline, and bookings. Tell me your issue and I will suggest the best service.';
+  };
+
+  const sendChatMessage = () => {
+    const message = chatInput.trim();
+    if (!message) return;
+
+    setChatMessages((current) => [
+      ...current,
+      { role: 'user', text: message },
+      { role: 'bot', text: getBotReply(message) },
+    ]);
+    setChatInput('');
+  };
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -734,7 +801,7 @@ export default function Page() {
       </section>
 
       {/* Why Us Section */}
-      <section id="about" ref={whyUsRef} className="py-32 bg-black relative z-10">
+      <section id="why" ref={whyUsRef} className="py-32 bg-black relative z-10">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <div>
             <div className="text-xs uppercase tracking-[1.5px] text-white font-medium mb-4 font-inter">Why Choose Us</div>
@@ -788,7 +855,7 @@ export default function Page() {
       </section>
 
       {/* Process Section */}
-      <section ref={processRef} className="py-24 md:py-32 bg-black relative z-10 overflow-hidden">
+      <section id="process" ref={processRef} className="py-24 md:py-32 bg-black relative z-10 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-16">
           <div className="w-full md:w-[40%] md:sticky md:top-32 h-fit">
             <div className="text-xs uppercase tracking-[1.5px] text-white font-medium mb-4 font-inter">How We Work</div>
@@ -813,6 +880,193 @@ export default function Page() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-24 md:py-32 bg-black relative z-10 border-y border-white/10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-12">
+            <div className="text-xs uppercase tracking-[1.5px] text-white font-medium mb-4 font-inter">Pricing</div>
+            <h2 className="font-space text-4xl md:text-5xl font-bold tracking-tight mb-4">Get Instant Price Estimate</h2>
+            <p className="text-white/55 font-inter max-w-3xl">Transparent pricing with no hidden costs. Select services to calculate your estimate.</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-8">
+            <div>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {calculatorCategories.map((category) => (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => setActiveCategory(category)}
+                    className={`px-4 py-2 rounded-full border text-sm font-inter transition-colors ${activeCategory === category ? 'bg-white text-black border-white' : 'text-white/70 border-white/20 hover:border-white/40'}`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+
+              <div className="font-space font-semibold text-[14px] text-white/50 tracking-[0.5px] mt-6 mb-3">Service Urgency</div>
+              <div className="grid grid-cols-3 gap-2 md:gap-3 mb-8">
+                {[
+                  { id: 'Normal', icon: <svg className="w-5 h-5 md:w-6 md:h-6 mx-auto stroke-white fill-none" strokeWidth={1.5} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, label: 'Normal', timeline: 'Standard delivery', badge: '1x price', mult: 1.0 },
+                  { id: 'Express', icon: <svg className="w-5 h-5 md:w-6 md:h-6 mx-auto stroke-white fill-none" strokeWidth={1.5} viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>, label: 'Express', timeline: 'Priority handling', badge: '1.5x price', mult: 1.5 },
+                  { id: 'Emergency', icon: <svg className="w-5 h-5 md:w-6 md:h-6 mx-auto stroke-white fill-none" strokeWidth={1.5} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, label: 'Emergency', timeline: 'Drop everything now', badge: '2x price', mult: 2.0 },
+                ].map((u) => (
+                  <button
+                    key={u.id}
+                    type="button"
+                    onClick={() => setUrgency(u.id as any)}
+                    className={`rounded-[10px] p-[14px_10px] md:p-[18px_16px] text-center transition-all duration-200 border outline-none ${urgency === u.id ? 'border-white/35 bg-[#111111]' : 'border-white/10 bg-[#0A0A0A] hover:border-white/20'}`}
+                  >
+                    {u.icon}
+                    <div className="font-space font-bold text-[13px] md:text-[15px] text-white mt-1 mb-1 md:mt-[10px] md:mb-1">{u.label}</div>
+                    <div className="hidden md:block font-inter text-[12px] text-white/50">{u.timeline}</div>
+                    <div className="inline-block border border-white/10 rounded-full px-[10px] py-[3px] font-space font-semibold text-[12px] text-white mt-1 md:mt-2">{u.badge}</div>
+                  </button>
+                ))}
+              </div>
+
+              <div className="space-y-3">
+                {filteredCalculatorServices.map((service) => {
+                  const selected = selectedServiceIds.includes(service.id);
+                  return (
+                    <button
+                      key={service.id}
+                      type="button"
+                      onClick={() => toggleCalculatorService(service.id)}
+                      className={`w-full text-left rounded-xl border px-4 py-4 transition-colors ${selected ? 'border-white bg-white/10' : 'border-white/15 hover:border-white/40'}`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <div className="font-space font-semibold text-lg">{service.name}</div>
+                          <div className="text-sm text-white/55 font-inter mt-1">{service.category} · {service.duration}</div>
+                        </div>
+                        <div className="font-space font-bold">Rs {service.price.toLocaleString()}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-6 h-fit sticky top-24">
+              <h3 className="font-space text-2xl font-bold mb-4">Price Summary</h3>
+
+              {selectedCalculatorServices.length === 0 ? (
+                <p className="text-white/50 font-inter">Select services to see your estimate.</p>
+              ) : (
+                <div className="space-y-3 mb-4">
+                  {selectedCalculatorServices.map((item) => (
+                    <div key={item.id} className="flex justify-between text-sm font-inter gap-3">
+                      <span className="text-white/70">{item.name}</span>
+                      <span className="text-white">Rs {item.price.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="border-t border-white/10 pt-4 space-y-2">
+                <div className="flex justify-between text-sm font-inter text-white/70">
+                  <span>Base Price</span>
+                  <span>₹{calculatorSubtotal.toLocaleString()}</span>
+                </div>
+                {urgencyMultiplier > 1 && (
+                  <div className="flex justify-between text-[13px] font-inter text-white/50">
+                    <span>Urgency ({urgencyMultiplier}x)</span>
+                    <span>+₹{Math.round(calculatorSubtotal * urgencyMultiplier - calculatorSubtotal).toLocaleString()}</span>
+                  </div>
+                )}
+                <p className="text-xs text-white/45 font-inter mt-3">Final price may vary based on parts and complexity.</p>
+                <div className="flex justify-between items-center pt-3 border-t border-white/10 mt-3">
+                  <span className="font-space text-[16px] font-bold">Estimated Total</span>
+                  <span className="font-space text-[20px] font-bold">₹{calculatorTotal.toLocaleString()}+</span>
+                </div>
+                <div className="flex justify-between text-sm font-inter text-white/70 mt-1">
+                  <span>Estimated Duration</span>
+                  <span>{estimateDuration}</span>
+                </div>
+              </div>
+
+              <div className="mt-6 space-y-3">
+                <button
+                  type="button"
+                  onClick={(e) => handleNavClick(e as any, '#contact')}
+                  className="w-full bg-white text-black rounded-lg px-4 py-3 font-space font-semibold hover:bg-[#E5E5E5] transition-colors"
+                >
+                  Book This Service
+                </button>
+                <a
+                  href={`https://wa.me/919265627252${selectedCalculatorServices.length > 0 ? `?text=${encodeURIComponent(`Hi TechnoFixer, I need a quote for:\n\n${selectedCalculatorServices.map((s: any) => `- ${s.name}`).join('\n')}\n\nUrgency: ${urgency}\nEstimated total shown: ₹${calculatorTotal.toLocaleString()}+\nPlease confirm.`)}` : ''}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block w-full text-center border border-white/25 rounded-lg px-4 py-3 font-inter text-white/90 hover:border-white/50 transition-colors"
+                >
+                  WhatsApp Quote
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="py-24 md:py-32 bg-black relative z-10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-10">
+            <div className="text-xs uppercase tracking-[1.5px] text-white font-medium mb-4 font-inter">About Us</div>
+            <h2 className="font-space text-4xl md:text-5xl font-bold tracking-tight mb-4">About TechnoFixer</h2>
+            <p className="text-white/55 font-inter max-w-3xl">Professional hardware, networking, and IT solutions provider based in Ahmedabad, Gujarat.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8">
+              <div className="text-xs uppercase tracking-[1.5px] text-white/60 font-inter mb-3">Our Vision</div>
+              <h3 className="font-space text-2xl font-bold mb-4">India&apos;s Most Trusted Tech Partner</h3>
+              <p className="text-white/65 font-inter leading-relaxed">To become India&apos;s most trusted technology partner delivering complete IT solutions that improve performance, security, and growth.</p>
+            </div>
+            <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8">
+              <div className="text-xs uppercase tracking-[1.5px] text-white/60 font-inter mb-3">Our Mission</div>
+              <h3 className="font-space text-2xl font-bold mb-4">What Drives Us</h3>
+              <ul className="space-y-3 text-white/65 font-inter list-disc pl-5">
+                <li>Deliver fast and reliable repair services</li>
+                <li>Build custom high-performance systems</li>
+                <li>Design scalable network and cloud solutions</li>
+                <li>Empower businesses with secure IT support</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team Section */}
+      <section className="py-24 bg-black relative z-10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-10">
+            <div className="text-xs uppercase tracking-[1.5px] text-white font-medium mb-4 font-inter">The Team</div>
+            <h2 className="font-space text-4xl md:text-5xl font-bold tracking-tight mb-4">Meet Our Expert</h2>
+            <p className="text-white/55 font-inter">Certified professionals with years of experience in IT and cybersecurity.</p>
+          </div>
+
+          <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 md:p-10 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-8 items-center">
+            <div className="text-center md:text-left">
+              <div className="w-28 h-28 rounded-full bg-white/10 border border-white/20 mx-auto md:mx-0 mb-4" />
+              <div className="text-sm uppercase tracking-[1.5px] text-white/60 font-inter">CEO & CTO</div>
+            </div>
+            <div>
+              <h3 className="font-space text-3xl font-bold mb-2">Expert Leader</h3>
+              <p className="text-white/55 font-inter mb-5">Offensive security, VAPT, infrastructure, and AI-driven system architecture.</p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                {['Offensive Security', 'VAPT', 'IT Infrastructure', 'AI/ML', 'System Architecture', 'Network Security'].map((tag) => (
+                  <span key={tag} className="px-3 py-1.5 rounded-full border border-white/20 text-sm text-white/80 font-inter">{tag}</span>
+                ))}
+              </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/25 text-sm font-space">
+                <Shield className="w-4 h-4" /> CIOSE Certified
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -847,22 +1101,79 @@ export default function Page() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section id="contact" ref={ctaRef} className="py-32 bg-black relative z-10">
+      {/* Contact Section */}
+      <section id="contact" ref={ctaRef} className="py-24 md:py-32 bg-black relative z-10">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div>
+            <div className="text-xs uppercase tracking-[1.5px] text-white font-medium mb-4 font-inter">Get In Touch</div>
+            <h2 className="font-space text-4xl md:text-5xl font-bold tracking-tight mb-4">Let&apos;s Fix Your Tech</h2>
+            <p className="text-white/55 font-inter mb-10">Ready to upgrade your IT or need emergency repair? We respond fast.</p>
+
+            <div className="space-y-5">
+              <div className="flex gap-4 items-start border border-white/10 rounded-xl p-4 bg-[#0A0A0A]">
+                <Phone className="w-5 h-5 text-white mt-0.5" />
+                <div>
+                  <div className="text-sm text-white/60 font-inter">Phone</div>
+                  <a href="tel:+919265627252" className="font-space text-lg font-semibold hover:text-white/80">+91 9265627252</a>
+                  <div className="text-xs text-white/45 font-inter">Emergency hotline available 24/7</div>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start border border-white/10 rounded-xl p-4 bg-[#0A0A0A]">
+                <Mail className="w-5 h-5 text-white mt-0.5" />
+                <div>
+                  <div className="text-sm text-white/60 font-inter">Email</div>
+                  <a href="mailto:officialtechnofixer@gmail.com" className="font-space text-base font-semibold hover:text-white/80 break-all">officialtechnofixer@gmail.com</a>
+                  <div className="text-xs text-white/45 font-inter">We typically respond within 2 hours</div>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start border border-white/10 rounded-xl p-4 bg-[#0A0A0A]">
+                <MapPin className="w-5 h-5 text-white mt-0.5" />
+                <div>
+                  <div className="text-sm text-white/60 font-inter">Location</div>
+                  <div className="font-space text-base font-semibold">Ahmedabad, Gujarat, India</div>
+                  <div className="text-xs text-white/45 font-inter">Serving clients across Gujarat</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <form className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-6 md:p-8 space-y-4">
+            <input type="text" placeholder="Your Name" className="w-full rounded-lg bg-black border border-white/20 px-4 py-3 font-inter outline-none focus:border-white/50" />
+            <input type="email" placeholder="Your Email" className="w-full rounded-lg bg-black border border-white/20 px-4 py-3 font-inter outline-none focus:border-white/50" />
+            <input type="tel" placeholder="Your Phone" className="w-full rounded-lg bg-black border border-white/20 px-4 py-3 font-inter outline-none focus:border-white/50" />
+            <select className="w-full rounded-lg bg-black border border-white/20 px-4 py-3 font-inter outline-none focus:border-white/50">
+              <option>Computer Repair</option>
+              <option>Custom PC Build</option>
+              <option>Network Setup</option>
+              <option>Cybersecurity Audit</option>
+              <option>Data Recovery</option>
+              <option>Enterprise Solutions</option>
+            </select>
+            <textarea placeholder="Your Message" rows={5} className="w-full rounded-lg bg-black border border-white/20 px-4 py-3 font-inter outline-none focus:border-white/50" />
+            <button ref={ctaButtonRef} type="button" className="w-full bg-white text-black rounded-lg px-4 py-3 font-space font-semibold hover:bg-[#E5E5E5] transition-colors">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <section className="pb-24 bg-black relative z-10">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-[#0A0A0A] border border-white/10 rounded-[32px] p-12 md:p-24 text-center relative overflow-hidden">
-            {/* Burst Animation Container */}
-            <div className="burst-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-r from-white/10 to-transparent pointer-events-none"></div>
-            
+          <div className="bg-[#0A0A0A] border border-white/10 rounded-[28px] p-10 md:p-16 text-center relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent_60%)]" />
             <div className="relative z-10">
-              <h2 className="font-space text-4xl md:text-6xl font-bold text-white mb-6">Ready to fix your IT?</h2>
-              <p className="text-white/80 text-lg md:text-xl mb-12 max-w-2xl mx-auto font-inter">
-                Get a free audit. No commitment required.
-              </p>
-              
-              <button ref={ctaButtonRef} className="bg-[#FFFFFF] hover:bg-[#E0E0E0] text-[#000000] px-[28px] py-[14px] rounded-[6px] font-space font-[600] text-[15px] transition-colors duration-200 ease-in-out inline-block will-change-transform">
-                Start the Conversation
-              </button>
+              <div className="text-xs uppercase tracking-[1.5px] text-white/70 font-inter mb-3">Get Started Today</div>
+              <h2 className="font-space text-4xl md:text-5xl font-bold mb-4">Ready to Fix Your IT?</h2>
+              <p className="text-white/60 font-inter mb-8">Get a free consultation. Same-day service available.</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="tel:+919265627252" className="inline-flex items-center justify-center gap-2 bg-white text-black rounded-lg px-5 py-3 font-space font-semibold hover:bg-[#E5E5E5] transition-colors">
+                  <Phone className="w-4 h-4" /> Call Now
+                </a>
+                <a href="https://wa.me/919265627252" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 border border-white/30 rounded-lg px-5 py-3 font-space hover:border-white/50 transition-colors">
+                  <MessageCircle className="w-4 h-4" /> WhatsApp Us
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -889,10 +1200,103 @@ export default function Page() {
           </div>
           
           <div className="text-sm text-white/45 font-inter">
-            &copy; {new Date().getFullYear()} TechnoFixer. All rights reserved.
+            &copy; {new Date().getFullYear()} TechnoFixer. All rights reserved. Build by Neil Banerjee.
           </div>
         </div>
       </footer>
+
+      <a
+        href="https://wa.me/919265627252"
+        target="_blank"
+        rel="noreferrer"
+        className="fixed right-4 bottom-4 z-[80] w-12 h-12 rounded-full bg-white text-black flex items-center justify-center shadow-xl hover:bg-[#E5E5E5] transition-colors"
+        aria-label="WhatsApp"
+      >
+        <MessageCircle className="w-5 h-5" />
+      </a>
+
+      <div className="fixed left-4 bottom-4 z-[80] w-[min(360px,calc(100vw-2rem))]">
+        {chatOpen && (
+          <div className="mb-3 rounded-2xl border border-white/20 bg-[#0A0A0A] overflow-hidden shadow-2xl">
+            <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-full bg-white text-black flex items-center justify-center font-space font-bold text-xs">S</div>
+                <div>
+                  <div className="font-space font-semibold leading-none">Saarthi</div>
+                  <div className="text-[11px] text-white/60 font-inter">Online · Ready to help</div>
+                </div>
+              </div>
+              <button type="button" onClick={() => setChatOpen(false)} className="text-white/60 hover:text-white">Close</button>
+            </div>
+
+            <div className="max-h-72 overflow-auto px-4 py-3 space-y-3">
+              {chatMessages.map((message, index) => (
+                <div
+                  key={`${message.role}-${index}`}
+                  className={`rounded-xl px-3 py-2 text-sm font-inter ${message.role === 'user' ? 'bg-white text-black ml-8' : 'bg-white/10 text-white mr-8'}`}
+                >
+                  {message.text}
+                </div>
+              ))}
+            </div>
+
+            <div className="px-4 pb-2 flex flex-wrap gap-2">
+              {['Pricing help', 'Repair timeline', 'Book service'].map((quickReply) => (
+                <button
+                  key={quickReply}
+                  type="button"
+                  onClick={() => {
+                    setChatInput(quickReply);
+                    setTimeout(() => {
+                      setChatMessages((current) => [
+                        ...current,
+                        { role: 'user', text: quickReply },
+                        { role: 'bot', text: getBotReply(quickReply) },
+                      ]);
+                      setChatInput('');
+                    }, 0);
+                  }}
+                  className="text-xs font-inter border border-white/20 rounded-full px-3 py-1.5 text-white/80 hover:border-white/40"
+                >
+                  {quickReply}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-3 border-t border-white/10 flex gap-2">
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendChatMessage();
+                  }
+                }}
+                className="flex-1 rounded-lg border border-white/20 bg-black px-3 py-2 text-sm font-inter outline-none focus:border-white/50"
+                placeholder="Ask me anything..."
+              />
+              <button
+                type="button"
+                onClick={sendChatMessage}
+                className="rounded-lg bg-white text-black px-3 py-2 hover:bg-[#E5E5E5] transition-colors"
+                aria-label="Send"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={() => setChatOpen((current) => !current)}
+          className="rounded-full border border-white/30 bg-black px-4 py-3 font-space text-sm font-semibold hover:bg-white hover:text-black transition-colors flex items-center gap-2"
+        >
+          <Bot className="w-4 h-4" /> Chat with Saarthi
+        </button>
+      </div>
     </main>
   );
 }

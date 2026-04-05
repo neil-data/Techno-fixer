@@ -1,0 +1,2242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechnoFixer | IT Solutions & Repair Services</title>
+  <meta name="description" content="Professional hardware repair, networking, and complete IT solutions in Ahmedabad. From laptop repairs to enterprise cybersecurity.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #000000;
+      --surface: #0A0A0A;
+      --surface-2: #111111;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.18);
+      --text-primary: #FFFFFF;
+      --text-muted: rgba(255,255,255,0.45);
+      --text-faint: rgba(255,255,255,0.18);
+      --font-head: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      cursor: none;
+      overflow-x: hidden;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.016) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-head);
+    }
+
+    h1 { font-weight: 800; letter-spacing: -3.5px; }
+    h2 { font-weight: 800; letter-spacing: -2px; }
+    h3 { font-weight: 700; letter-spacing: -0.5px; }
+    
+    p {
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    .label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { cursor: none; font-family: inherit; }
+
+    /* Custom Cursor */
+    #cur-dot {
+      width: 5px; height: 5px;
+      background: #fff; border-radius: 50%;
+      position: fixed; pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s;
+    }
+    #cur-ring {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      position: fixed; pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%,-50%);
+      transition: width .3s, height .3s, border-color .3s, background .3s;
+    }
+    body:has(a:hover) #cur-ring,
+    body:has(button:hover) #cur-ring {
+      width: 44px; height: 44px;
+      border-color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* Navbar */
+    #nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 56px;
+      z-index: 1000;
+      transition: all 0.4s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #nav.scrolled {
+      padding: 14px 56px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 18px;
+      color: white;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      position: relative;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover {
+      color: white;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: white;
+      transition: width 0.3s;
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    .nav-cta {
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 9px 20px;
+      background: transparent;
+      color: white;
+      transition: background 0.3s, color 0.3s;
+    }
+    .nav-cta:hover {
+      background: white;
+      color: black;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: none;
+      z-index: 1001;
+    }
+    .hamburger span {
+      width: 24px;
+      height: 1px;
+      background: white;
+      transition: 0.3s;
+    }
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.97);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .mobile-menu.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mobile-menu a {
+      font-family: var(--font-head);
+      font-size: 32px;
+      color: white;
+    }
+    .mobile-menu .close-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: none;
+    }
+    .mobile-menu .close-btn span {
+      position: absolute;
+      width: 24px;
+      height: 1px;
+      background: white;
+    }
+    .mobile-menu .close-btn span:nth-child(1) { transform: rotate(45deg); }
+    .mobile-menu .close-btn span:nth-child(2) { transform: rotate(-45deg); }
+
+    /* Hero Section */
+    #hero {
+      position: relative;
+      height: 100vh;
+      height: 100svh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 0 56px;
+    }
+    #c3d {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-glow {
+      position: absolute;
+      left: 2%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.055) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+      animation: gpulse 4s ease-in-out infinite;
+    }
+    @keyframes gpulse {
+      0%, 100% { transform: translateY(-50%) scale(1); }
+      50% { transform: translateY(-50%) scale(1.07); }
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      margin-left: auto;
+      width: 54%;
+      max-width: 620px;
+      opacity: 0;
+      padding-top: 80px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 6px 16px;
+      margin-bottom: 28px;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.5);
+    }
+    .bdot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fff;
+      animation: bp 2s ease-in-out infinite;
+    }
+    @keyframes bp {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    .hero-content h1 {
+      font-size: clamp(48px, 6vw, 80px);
+      line-height: 0.95;
+      margin-bottom: 0;
+    }
+    .line {
+      display: block;
+      overflow: hidden;
+    }
+    .li {
+      display: block;
+      transform: translateY(110%);
+    }
+    .hrule {
+      width: 40px;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+      margin: 22px 0;
+      opacity: 0;
+    }
+    .hero-content p {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 400px;
+      margin-bottom: 32px;
+      opacity: 0;
+    }
+    .hbtns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      opacity: 0;
+    }
+    .btn-p {
+      font-family: var(--font-head);
+      font-size: 14px;
+      font-weight: 600;
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 13px 26px;
+      cursor: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-p:hover {
+      background: #e5e5e5;
+      transform: translateY(-2px);
+    }
+    .btn-o {
+      font-family: var(--font-head);
+      font-size: 14px;
+      font-weight: 400;
+      background: transparent;
+      color: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 6px;
+      padding: 13px 26px;
+      cursor: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-o:hover {
+      border-color: rgba(255,255,255,0.4);
+      color: #fff;
+    }
+    .hstats {
+      display: flex;
+      gap: 36px;
+      margin-top: 44px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+    }
+    .hstat {
+      display: flex;
+      flex-direction: column;
+    }
+    .snum {
+      font-family: var(--font-head);
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .ssfx {
+      font-family: var(--font-head);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-faint);
+    }
+    .slbl {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-top: 5px;
+    }
+    .scroll-ind {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+      opacity: 0;
+    }
+    .sind-line {
+      width: 1px;
+      height: 42px;
+      background: rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .sind-dot {
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.55);
+      position: absolute;
+      top: -14px;
+      animation: sf 1.6s ease-in-out infinite;
+    }
+    @keyframes sf {
+      0% { top: -14px; }
+      100% { top: 42px; }
+    }
+    .scroll-ind span {
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* Sections Global */
+    section.content-sec {
+      padding: 160px 56px;
+      position: relative;
+    }
+    .sec-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .sec-h2 {
+      font-size: clamp(32px, 4vw, 48px);
+      margin-bottom: 24px;
+      line-height: 1.1;
+    }
+    .sec-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin-bottom: 64px;
+    }
+
+    /* Services */
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-faint);
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    .tab-btn.active {
+      background: white;
+      color: black;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .srv-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 28px;
+      position: relative;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    .srv-top-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: transparent;
+      transition: background 0.3s;
+    }
+    .srv-card:hover {
+      background: var(--surface);
+      border-color: var(--border-hover);
+    }
+    .srv-card:hover .srv-top-bar {
+      background: #ffffff;
+    }
+    .srv-num {
+      position: absolute;
+      top: 32px; right: 28px;
+      font-family: var(--font-head);
+      font-size: 11px;
+      color: var(--text-faint);
+    }
+    .srv-icon {
+      width: 44px; height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-2);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px;
+    }
+    .srv-icon svg {
+      width: 24px; height: 24px;
+      stroke: white; stroke-width: 1.5; fill: none;
+    }
+    .srv-card h3 {
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    .srv-list {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    .srv-list li {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .srv-list li:last-child { border-bottom: none; }
+    .srv-link {
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: color 0.3s;
+    }
+    .srv-link:hover { color: white; }
+    .srv-link svg { transition: transform 0.3s; }
+    .srv-link:hover svg { transform: translateX(5px); }
+
+    /* Why Us & Process (2-col) */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+    .sticky-left {
+      position: sticky;
+      top: 120px;
+      align-self: start;
+    }
+    .why-points {
+      display: flex; flex-direction: column; gap: 32px;
+      margin-top: 48px;
+    }
+    .why-point {
+      display: flex; gap: 16px;
+    }
+    .why-point svg {
+      width: 24px; height: 24px;
+      stroke: white; stroke-width: 1.5; fill: none; flex-shrink: 0;
+    }
+    .why-point h4 { font-size: 16px; margin-bottom: 6px; }
+    .why-point p { font-size: 14px; color: var(--text-muted); }
+    
+    .metrics-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+    }
+    .metric-row { margin-bottom: 24px; }
+    .metric-row:last-child { margin-bottom: 0; }
+    .metric-lbl {
+      display: flex; justify-content: space-between;
+      font-size: 13px; font-family: var(--font-head); margin-bottom: 8px;
+    }
+    .metric-track {
+      width: 100%; height: 3px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px; overflow: hidden;
+    }
+    .metric-fill {
+      height: 100%; background: #ffffff;
+      width: 0%; /* animated via GSAP */
+    }
+    .metric-hl {
+      margin-top: 48px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .metric-hl .lbl { font-size: 11px; letter-spacing: 1.5px; color: var(--text-faint); margin-bottom: 8px; display: block; }
+    .metric-hl .val { font-family: var(--font-head); font-size: 52px; font-weight: 800; line-height: 1; }
+
+    /* Process */
+    #process { background: var(--surface); }
+    .proc-cards { display: flex; flex-direction: column; gap: 16px; }
+    .proc-card {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 32px;
+      display: flex; gap: 28px;
+      transition: all 0.3s;
+      opacity: 0; transform: translateX(60px);
+    }
+    .proc-card:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-2);
+    }
+    .proc-num {
+      font-family: var(--font-head); font-size: 56px; font-weight: 800;
+      color: rgba(255,255,255,0.05); width: 72px; flex-shrink: 0; line-height: 0.8;
+    }
+    .proc-tag {
+      display: inline-block; border: 1px solid var(--border); border-radius: 4px;
+      padding: 4px 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--text-faint); margin-bottom: 12px;
+    }
+    .proc-card h3 { font-size: 18px; margin-bottom: 8px; }
+    .proc-card p { font-size: 14px; color: var(--text-muted); }
+
+    /* About & Team */
+    .about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+    .ab-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 40px;
+      opacity: 0; transform: translateY(50px);
+    }
+    .ab-card h3 { font-size: 24px; margin: 16px 0; }
+    .ab-card p { font-size: 15px; color: var(--text-muted); }
+    .mission-list { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
+    .mission-list div {
+      border-left: 1px solid rgba(255,255,255,0.15);
+      padding-left: 14px; font-size: 14px; color: var(--text-muted); line-height: 1.6;
+    }
+
+    .team-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 48px;
+      display: flex; gap: 48px; align-items: center;
+    }
+    .team-left { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .team-avatar {
+      width: 180px; height: 180px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--surface-2);
+    }
+    .team-role { font-family: var(--font-head); font-weight: 700; font-size: 16px; }
+    .team-right h3 { font-size: 32px; margin-bottom: 8px; }
+    .team-right p { font-size: 16px; color: var(--text-muted); margin-bottom: 24px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+    .tag {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 100px; padding: 6px 14px; font-size: 12px; color: var(--text-muted);
+    }
+    .cert-badge {
+      display: inline-flex; align-items: center; gap: 12px;
+      border: 1px solid var(--border); border-radius: 6px; padding: 10px 16px;
+      font-size: 14px; font-weight: 500;
+    }
+    .cert-badge svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 1.5; }
+
+    /* Testimonial */
+    .testi-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 64px; position: relative;
+    }
+    .quote-mark {
+      position: absolute; top: 40px; left: 40px;
+      font-family: var(--font-head); font-size: 120px; font-weight: 800;
+      color: rgba(255,255,255,0.05); line-height: 1;
+    }
+    .testi-text {
+      font-size: 22px; font-style: italic; color: rgba(255,255,255,0.8);
+      line-height: 1.6; position: relative; z-index: 1; margin-bottom: 40px;
+      padding-left: 40px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 16px; padding-left: 40px; }
+    .testi-av { width: 48px; height: 48px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; }
+    .testi-name { font-size: 15px; font-weight: 500; }
+    .testi-role { font-size: 13px; color: var(--text-muted); }
+
+    /* Contact */
+    .contact-info { display: flex; flex-direction: column; gap: 32px; }
+    .c-row { display: flex; gap: 16px; }
+    .c-row svg { width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 1.5; flex-shrink: 0; }
+    .c-lbl { font-size: 11px; text-transform: uppercase; color: var(--text-faint); margin-bottom: 4px; }
+    .c-val { font-family: var(--font-head); font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+    .c-sub { font-size: 12px; color: var(--text-muted); }
+    
+    .contact-form {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 40px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .contact-form input, .contact-form select, .contact-form textarea {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 16px; font-family: var(--font-body);
+      font-size: 14px; color: white; outline: none; transition: border-color 0.3s;
+    }
+    .contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus {
+      border-color: rgba(255,255,255,0.35);
+    }
+    .contact-form textarea { resize: vertical; min-height: 120px; }
+    .btn-submit {
+      background: #fff; color: #000; font-family: var(--font-head); font-weight: 600;
+      font-size: 15px; border: none; border-radius: 6px; padding: 15px;
+      cursor: none; transition: background 0.3s; margin-top: 8px;
+    }
+    .btn-submit:hover { background: #e5e5e5; }
+
+    /* CTA Banner */
+    .cta-banner {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; margin: 0 56px; padding: 96px 64px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-glow {
+      position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.04), transparent 70%);
+      pointer-events: none;
+    }
+    .cta-banner h2 { font-size: clamp(36px, 5vw, 56px); margin: 16px 0 24px; }
+    .cta-banner p { font-size: 16px; color: var(--text-muted); margin-bottom: 40px; }
+    .cta-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .btn-cta-p {
+      background: #fff; color: #000; font-family: var(--font-head); font-weight: 600;
+      font-size: 15px; border: none; border-radius: 6px; padding: 15px 32px;
+      cursor: none; transition: transform 0.2s;
+    }
+    .btn-cta-o {
+      background: transparent; color: white; font-family: var(--font-head); font-weight: 500;
+      font-size: 15px; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 15px 32px;
+      cursor: none; transition: background 0.3s;
+    }
+    .btn-cta-o:hover { background: rgba(255,255,255,0.05); }
+
+    /* Footer */
+    footer { padding: 80px 56px 32px; border-top: 1px solid var(--border); margin-top: 80px; }
+    .ft-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 64px; margin-bottom: 64px; }
+    .ft-logo { font-family: var(--font-head); font-weight: 700; font-size: 20px; margin-bottom: 12px; display: block; }
+    .ft-tag { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .ft-col h4 { font-size: 14px; margin-bottom: 24px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-faint); }
+    .ft-links { display: flex; flex-direction: column; gap: 12px; }
+    .ft-links a { font-size: 13px; color: var(--text-muted); transition: color 0.3s; }
+    .ft-links a:hover { color: white; }
+    .ft-bottom {
+      border-top: 1px solid var(--border); padding-top: 28px;
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--text-faint);
+    }
+
+    /* Pricing Calculator */
+    #pricing { padding-top: 120px; padding-bottom: 120px; }
+    .calc-layout { display: grid; grid-template-columns: 55% 45%; gap: 48px; align-items: start; margin-top: 48px; }
+    
+    .cat-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .cat-btn {
+      background: transparent; color: var(--text-muted); border: 1px solid var(--border);
+      border-radius: 100px; padding: 8px 16px; font-size: 13px; font-family: var(--font-body);
+      cursor: none; transition: all 0.2s;
+    }
+    .cat-btn.active { background: #fff; color: #000; border-color: #fff; }
+    .cat-btn:hover:not(.active) { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+    .urgency-label { font-family: var(--font-head); font-weight: 600; font-size: 14px; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 12px; }
+    .urgency-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+    .urgency-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 16px; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .urgency-card.selected { border-color: rgba(255,255,255,0.35); background: var(--surface-2); }
+    .urgency-icon { width: 24px; height: 24px; stroke: white; stroke-width: 1.5; fill: none; margin: 0 auto; display: block; }
+    .urgency-name { font-family: var(--font-head); font-weight: 700; font-size: 15px; color: white; margin: 10px 0 4px; }
+    .urgency-time { font-family: var(--font-body); font-size: 12px; color: var(--text-muted); }
+    .urgency-badge { display: inline-block; border: 1px solid var(--border); border-radius: 100px; padding: 3px 10px; font-family: var(--font-head); font-weight: 600; font-size: 12px; color: white; margin-top: 8px; }
+
+
+    .svc-list { display: flex; flex-direction: column; gap: 8px; }
+    .svc-item {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px 20px; display: flex; align-items: center; gap: 16px; cursor: none;
+      transition: all 0.2s;
+    }
+    .svc-item.selected { border-color: rgba(255,255,255,0.3); background: var(--surface-2); }
+    .svc-item:hover { border-color: rgba(255,255,255,0.2); }
+    
+    .svc-check {
+      width: 16px; height: 16px; border: 1px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
+    }
+    .svc-item.selected .svc-check { background: #fff; border-color: #fff; }
+    .svc-check svg { width: 10px; height: 10px; stroke: #000; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; fill: none; opacity: 0; transition: opacity 0.2s; }
+    .svc-item.selected .svc-check svg { opacity: 1; }
+    
+    .svc-info { flex: 1; }
+    .svc-name { font-family: var(--font-head); font-weight: 500; font-size: 15px; color: #fff; margin-bottom: 4px; }
+    .svc-dur { font-family: var(--font-body); font-size: 12px; color: var(--text-muted); }
+    .svc-price { font-family: var(--font-head); font-weight: 600; font-size: 15px; color: #fff; }
+
+    .calc-summary {
+      position: sticky; top: 100px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px;
+    }
+    .calc-summary h3 { font-family: var(--font-head); font-weight: 700; font-size: 18px; margin-bottom: 24px; }
+    
+    .calc-empty { text-align: center; padding: 32px 0; color: var(--text-muted); font-size: 14px; }
+    .calc-empty svg { width: 32px; height: 32px; fill: var(--text-faint); margin-bottom: 16px; }
+    
+    .calc-active { display: none; }
+    .calc-active.show { display: block; }
+    
+    .sel-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .sel-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .sel-item-name { color: rgba(255,255,255,0.85); display: flex; align-items: center; gap: 8px; }
+    .sel-rm { background: none; border: none; color: var(--text-muted); cursor: none; font-size: 16px; line-height: 1; padding: 0 4px; }
+    .sel-rm:hover { color: #fff; }
+    .sel-item-price { font-family: var(--font-head); font-weight: 500; }
+    
+    .calc-totals { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .calc-row { display: flex; justify-content: space-between; align-items: center; }
+    .calc-sub { font-size: 14px; color: var(--text-muted); }
+    .calc-note { font-size: 11px; color: var(--text-faint); font-style: italic; margin-top: -4px; }
+    .calc-tot { font-family: var(--font-head); font-weight: 700; font-size: 20px; color: #fff; margin-top: 8px; }
+    .calc-dur { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    
+    .calc-btns { display: flex; flex-direction: column; gap: 12px; }
+    .btn-book {
+      width: 100%; background: #fff; color: #000; font-family: var(--font-head); font-weight: 600;
+      font-size: 15px; border: none; border-radius: 6px; padding: 15px; cursor: none; transition: background 0.3s;
+    }
+    .btn-book:hover { background: #e5e5e5; }
+    .btn-wa {
+      width: 100%; background: transparent; color: white; font-family: var(--font-head); font-weight: 500;
+      font-size: 15px; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 15px;
+      cursor: none; transition: background 0.3s;
+    }
+    .btn-wa:hover { background: rgba(255,255,255,0.05); }
+
+    /* Chatbot */
+    #chatbot { position: fixed; bottom: 28px; left: 28px; z-index: 9001; }
+    #chat-toggle {
+      width: 52px; height: 52px; background: #fff; border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; cursor: none;
+      transition: transform .2s, background .2s; box-shadow: none; position: relative;
+    }
+    #chat-toggle:hover { transform: scale(1.08); background: #f0f0f0; }
+    #chat-toggle svg { width: 24px; height: 24px; fill: #000; }
+    .chat-unread {
+      position: absolute; top: 0; right: 0; width: 12px; height: 12px; background: #ff3b30;
+      border-radius: 50%; border: 2px solid var(--bg); display: none;
+    }
+    .chat-unread.show { display: block; }
+
+    #chat-window {
+      position: absolute; bottom: 64px; left: 0; width: 320px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: none;
+      flex-direction: column; max-height: 480px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+    #chat-window.open { display: flex; animation: chat-in 0.3s cubic-bezier(0.23,1,0.32,1); }
+    @keyframes chat-in { from { opacity:0; transform:translateY(12px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+
+    #chat-header {
+      display: flex; align-items: center; gap: 12px; padding: 16px 20px;
+      border-bottom: 1px solid var(--border); background: var(--surface-2);
+    }
+    .chat-avatar {
+      width: 36px; height: 36px; border-radius: 50%; background: #fff; color: #000;
+      display: flex; align-items: center; justify-content: center; font-family: var(--font-head);
+      font-weight: 700; font-size: 16px; flex-shrink: 0;
+    }
+    .chat-name { font-family: var(--font-head); font-size: 14px; font-weight: 600; }
+    .chat-status { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    #chat-close {
+      margin-left: auto; background: none; border: none; color: var(--text-muted);
+      font-size: 24px; cursor: none; line-height: 1; transition: color .2s; padding: 0 4px;
+    }
+    #chat-close:hover { color: #fff; }
+
+    #chat-messages {
+      flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px;
+      max-height: 280px; scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+    }
+    #chat-messages::-webkit-scrollbar { width: 4px; }
+    #chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .msg {
+      max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.55;
+      font-family: var(--font-body); animation: msg-in 0.25s ease; white-space: pre-wrap;
+    }
+    @keyframes msg-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .msg.bot { background: var(--surface-2); border: 1px solid var(--border); color: rgba(255,255,255,0.85); align-self: flex-start; border-bottom-left-radius: 4px; }
+    .msg.user { background: #fff; color: #000; align-self: flex-end; border-bottom-right-radius: 4px; font-weight: 500; }
+
+    .typing-dots { display: flex; gap: 4px; padding: 4px 2px; }
+    .typing-dots span { width: 6px; height: 6px; background: var(--text-muted); border-radius: 50%; animation: typing 1.4s infinite ease-in-out both; }
+    .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+    #chat-quick-replies { padding: 8px 16px 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .qr-btn {
+      font-size: 12px; font-weight: 400; font-family: var(--font-body); background: transparent;
+      border: 1px solid var(--border); border-radius: 100px; padding: 5px 12px; color: var(--text-muted);
+      cursor: none; transition: border-color .2s, color .2s; white-space: nowrap;
+    }
+    .qr-btn:hover { border-color: rgba(255,255,255,.3); color: #fff; }
+
+    #chat-input-row { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border); }
+    #chat-input {
+      flex: 1; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 14px; font-size: 13px; color: #fff; font-family: var(--font-body); outline: none; transition: border-color .2s;
+    }
+    #chat-input:focus { border-color: rgba(255,255,255,.3); }
+    #chat-send {
+      width: 38px; height: 38px; background: #fff; color: #000; border: none; border-radius: 8px;
+      font-size: 16px; cursor: none; flex-shrink: 0; transition: background .2s; display: flex; align-items: center; justify-content: center;
+    }
+    #chat-send:hover { background: #e5e5e5; }
+    #chat-send svg { width: 16px; height: 16px; fill: #000; }
+
+    /* WhatsApp */
+    #wa-btn {
+      position: fixed; bottom: 28px; right: 28px;
+      width: 52px; height: 52px; background: #fff; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9000; cursor: none; border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.2s, background 0.2s;
+    }
+    #wa-btn svg { width: 28px; height: 28px; fill: #000; }
+    #wa-btn:hover { transform: scale(1.08) translateY(-2px); background: #f0f0f0; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      #nav { padding: 16px 24px; }
+      #nav.scrolled { padding: 12px 24px; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      
+      #hero { padding: 90px 24px 72px; flex-direction: column; justify-content: flex-end; min-height: 100svh; }
+      .hero-content { width: 100%; margin-left: 0; padding-top: 40px; }
+      .hero-content h1 { font-size: clamp(44px, 11vw, 58px); }
+      .hbtns { flex-direction: column; }
+      .btn-p, .btn-o { width: 100%; }
+      .hstats { gap: 24px; flex-wrap: wrap; }
+      .snum { font-size: 28px; }
+      #c3d { transform: scale(0.65) translateX(-20%); transform-origin: left center; }
+      
+      section.content-sec { padding: 100px 24px; }
+      .two-col { grid-template-columns: 1fr; gap: 40px; }
+      .sticky-left { position: static; }
+      .services-grid { grid-template-columns: 1fr; }
+      .about-cards { grid-template-columns: 1fr; }
+      .team-card { flex-direction: column; padding: 32px; gap: 32px; }
+      .testi-card { padding: 40px 24px; }
+      .quote-mark { top: 20px; left: 20px; font-size: 80px; }
+      .testi-text { padding-left: 0; font-size: 18px; }
+      .testi-author { padding-left: 0; }
+      
+      .cta-banner { margin: 0 16px; padding: 64px 28px; }
+      .cta-banner h2 { font-size: 36px; }
+      .btn-cta-p, .btn-cta-o { width: 100%; }
+      
+      .calc-layout { display: flex; flex-direction: column; gap: 40px; }
+      .calc-summary { position: static; margin-top: 0; }
+      
+      .urgency-grid { gap: 8px; }
+      .urgency-card { padding: 14px 10px; }
+      .urgency-icon { width: 20px; height: 20px; }
+      .urgency-name { font-size: 13px; }
+      .urgency-time { display: none; }
+
+      #chat-window { 
+        width: calc(100vw - 32px); 
+        left: 0; 
+        bottom: 64px; 
+        max-height: 60vh; 
+      }
+      #chatbot { left: 16px; bottom: 16px; }
+
+      footer { padding: 48px 24px 28px; margin-top: 40px; }
+      .ft-grid { grid-template-columns: 1fr; gap: 32px; }
+      .ft-bottom { flex-direction: column; gap: 8px; text-align: center; }
+      
+      #wa-btn { bottom: 20px; right: 20px; width: 48px; height: 48px; }
+      #wa-btn svg { width: 24px; height: 24px; }
+    }
+    @media (max-width: 480px) {
+      .hero-content h1 { font-size: 40px; letter-spacing: -2px; }
+      .sec-h2 { font-size: 30px; }
+      section.content-sec { padding: 64px 20px; }
+      .badge { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cur-dot"></div>
+  <div id="cur-ring"></div>
+
+  <nav id="nav">
+    <a href="#" class="nav-logo">TechnoFixer</a>
+    <div class="nav-links">
+      <a href="#hero">Home</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Call Now</button>
+    <div class="hamburger" onclick="document.getElementById('mobile-menu').classList.add('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="mobile-menu">
+    <div class="close-btn" onclick="document.getElementById('mobile-menu').classList.remove('open')">
+      <span></span><span></span>
+    </div>
+    <a href="#hero" onclick="document.getElementById('mobile-menu').classList.remove('open')">Home</a>
+    <a href="#services" onclick="document.getElementById('mobile-menu').classList.remove('open')">Services</a>
+    <a href="#about" onclick="document.getElementById('mobile-menu').classList.remove('open')">About</a>
+    <a href="#contact" onclick="document.getElementById('mobile-menu').classList.remove('open')">Contact</a>
+  </div>
+
+  <section id="hero">
+    <canvas id="c3d"></canvas>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="badge">
+        <span class="bdot"></span>
+        24/7 Emergency Support Available
+      </div>
+      <h1>
+        <span class="line"><span class="li">Your Trusted</span></span>
+        <span class="line"><span class="li">Technology</span></span>
+        <span class="line"><span class="li">Partner.</span></span>
+      </h1>
+      <div class="hrule"></div>
+      <p>Professional hardware repair, networking, and complete IT solutions in Ahmedabad. From laptop repairs to enterprise cybersecurity.</p>
+      <div class="hbtns">
+        <button class="btn-p" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Our Services &rarr;</button>
+        <button class="btn-o" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Free Quote</button>
+      </div>
+      <div class="hstats">
+        <div class="hstat">
+          <div><span class="snum" data-t="200">0</span><span class="ssfx">+</span></div>
+          <span class="slbl">Projects Done</span>
+        </div>
+        <div class="hstat">
+          <div><span class="snum" data-t="98">0</span><span class="ssfx">%</span></div>
+          <span class="slbl">Satisfaction</span>
+        </div>
+        <div class="hstat">
+          <div><span class="snum" data-t="9">0</span><span class="ssfx">+</span></div>
+          <span class="slbl">Services</span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-ind">
+      <div class="sind-line"><div class="sind-dot"></div></div>
+      <span>scroll</span>
+    </div>
+  </section>
+
+  <section id="services" class="content-sec">
+    <span class="sec-label">WHAT WE DO</span>
+    <h2 class="sec-h2">Complete IT Solutions</h2>
+    <p class="sec-sub">From individual repairs to enterprise infrastructure — all under one roof.</p>
+    
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('core')">Core Services</button>
+      <button class="tab-btn" onclick="switchTab('enterprise')">Enterprise</button>
+    </div>
+
+    <div id="tab-core" class="services-grid">
+      <!-- 1 -->
+      <div class="srv-card">
+        <div class="srv-top-bar"></div>
+        <span class="srv-num">01</span>
+        <div class="srv-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></div>
+        <h3>Computer & Laptop Services</h3>
+        <ul class="srv-list">
+          <li>Hardware diagnostics & repair</li>
+          <li>Screen & keyboard replacement</li>
+          <li>Battery service & replacement</li>
+        </ul>
+        <a href="#" class="srv-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- 2 -->
+      <div class="srv-card">
+        <div class="srv-top-bar"></div>
+        <span class="srv-num">02</span>
+        <div class="srv-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
+        <h3>Custom PC Building</h3>
+        <ul class="srv-list">
+          <li>Component selection advice</li>
+          <li>Professional assembly</li>
+          <li>Cable management</li>
+        </ul>
+        <a href="#" class="srv-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- 3 -->
+      <div class="srv-card">
+        <div class="srv-top-bar"></div>
+        <span class="srv-num">03</span>
+        <div class="srv-icon"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg></div>
+        <h3>Network Solutions</h3>
+        <ul class="srv-list">
+          <li>Router & mesh setup</li>
+          <li>WiFi optimization</li>
+          <li>Structured cabling</li>
+        </ul>
+        <a href="#" class="srv-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- 4 -->
+      <div class="srv-card">
+        <div class="srv-top-bar"></div>
+        <span class="srv-num">04</span>
+        <div class="srv-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+        <h3>Cybersecurity & Audit</h3>
+        <ul class="srv-list">
+          <li>Vulnerability assessment</li>
+          <li>Malware removal</li>
+          <li>Security hardening</li>
+        </ul>
+        <a href="#" class="srv-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- 5 -->
+      <div class="srv-card">
+        <div class="srv-top-bar"></div>
+        <span class="srv-num">05</span>
+        <div class="srv-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg></div>
+        <h3>Data Recovery</h3>
+        <ul class="srv-list">
+          <li>File recovery</li>
+          <li>System restoration</li>
+          <li>Hard drive repair</li>
+        </ul>
+        <a href="#" class="srv-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- 6 -->
+      <div class="srv-card">
+        <div class="srv-top-bar"></div>
+        <span class="srv-num">06</span>
+        <div class="srv-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
+        <h3>Software Installation</h3>
+        <ul class="srv-list">
+          <li>OS installation & setup</li>
+          <li>Driver configuration</li>
+          <li>Application setup</li>
+        </ul>
+        <a href="#" class="srv-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+
+    <div id="tab-ent" class="services-grid" style="display:none;">
+      <!-- 7 -->
+      <div class="srv-card">
+        <div class="srv-top-bar"></div>
+        <span class="srv-num">07</span>
+        <div class="srv-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+        <h3>Enterprise Security</h3>
+        <ul class="srv-list">
+          <li>Vulnerability Assessment (VAPT)</li>
+          <li>Firewall & Endpoint Protection</li>
+          <li>Data Protection & Compliance</li>
+        </ul>
+        <a href="#" class="srv-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- 8 -->
+      <div class="srv-card">
+        <div class="srv-top-bar"></div>
+        <span class="srv-num">08</span>
+        <div class="srv-icon"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg></div>
+        <h3>Digital Presence</h3>
+        <ul class="srv-list">
+          <li>Cloud Storage & Remote Work</li>
+          <li>Microsoft 365 / Google Workspace</li>
+          <li>Virtualization Solutions</li>
+        </ul>
+        <a href="#" class="srv-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <!-- 9 -->
+      <div class="srv-card">
+        <div class="srv-top-bar"></div>
+        <span class="srv-num">09</span>
+        <div class="srv-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+        <h3>Smart Enterprise</h3>
+        <ul class="srv-list">
+          <li>CCTV & Surveillance Systems</li>
+          <li>Smart Home Automation</li>
+          <li>Biometric Locks & IoT</li>
+        </ul>
+        <a href="#" class="srv-link">Learn more <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-sec">
+    <div class="two-col">
+      <div class="sticky-left">
+        <span class="sec-label">WHY TECHNOFIXER</span>
+        <h2 class="sec-h2">Built for Performance & Security</h2>
+        <p class="sec-sub">Six years serving Ahmedabad businesses — from laptop repair to enterprise VAPT.</p>
+        
+        <div class="why-points">
+          <div class="why-point">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <div>
+              <h4>Rapid Response</h4>
+              <p>Same-day service for most repairs</p>
+            </div>
+          </div>
+          <div class="why-point">
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            <div>
+              <h4>Certified Experts</h4>
+              <p>CIOSE certified, VAPT specialists</p>
+            </div>
+          </div>
+          <div class="why-point">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <div>
+              <h4>Local & Trusted</h4>
+              <p>Based in Ahmedabad, serving Gujarat</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <div class="metrics-card">
+          <div class="metric-row">
+            <div class="metric-lbl"><span>Uptime</span><span>99%</span></div>
+            <div class="metric-track"><div class="metric-fill" data-w="99"></div></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-lbl"><span>Satisfaction</span><span>98%</span></div>
+            <div class="metric-track"><div class="metric-fill" data-w="98"></div></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-lbl"><span>On-time</span><span>95%</span></div>
+            <div class="metric-track"><div class="metric-fill" data-w="95"></div></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-lbl"><span>Resolved</span><span>92%</span></div>
+            <div class="metric-track"><div class="metric-fill" data-w="92"></div></div>
+          </div>
+          
+          <div class="metric-hl">
+            <span class="lbl">AVG RESPONSE TIME</span>
+            <span class="val">47 min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="process" class="content-sec">
+    <div class="two-col">
+      <div class="sticky-left">
+        <span class="sec-label">HOW WE WORK</span>
+        <h2 class="sec-h2">Simple. Fast. Reliable.</h2>
+        <p class="sec-sub">A proven process from first call to complete resolution.</p>
+      </div>
+      
+      <div class="proc-cards">
+        <div class="proc-card">
+          <div class="proc-num">01</div>
+          <div>
+            <span class="proc-tag">Day 1</span>
+            <h3>Book a Service</h3>
+            <p>Call, WhatsApp or fill our form</p>
+          </div>
+        </div>
+        <div class="proc-card">
+          <div class="proc-num">02</div>
+          <div>
+            <span class="proc-tag">Day 1–2</span>
+            <h3>Diagnosis</h3>
+            <p>We assess and give clear estimate</p>
+          </div>
+        </div>
+        <div class="proc-card">
+          <div class="proc-num">03</div>
+          <div>
+            <span class="proc-tag">Day 2–7</span>
+            <h3>Repair & Build</h3>
+            <p>Professional execution, zero shortcuts</p>
+          </div>
+        </div>
+        <div class="proc-card">
+          <div class="proc-num">04</div>
+          <div>
+            <span class="proc-tag">Ongoing</span>
+            <h3>Delivery & Support</h3>
+            <p>Delivered + 30 day follow-up</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="content-sec">
+    <span class="sec-label">ABOUT US</span>
+    <h2 class="sec-h2">About TechnoFixer</h2>
+    <p class="sec-sub">Professional hardware, networking, and IT solutions provider based in Ahmedabad, Gujarat. Reliable, secure, and innovative technology support for individuals and businesses.</p>
+    
+    <div class="about-cards">
+      <div class="ab-card">
+        <span class="sec-label">OUR VISION</span>
+        <h3>India's Most Trusted Tech Partner</h3>
+        <p>To become India's most trusted and innovative technology partner delivering complete IT solutions that enhance performance, security, and growth for individuals and businesses.</p>
+      </div>
+      <div class="ab-card">
+        <span class="sec-label">OUR MISSION</span>
+        <h3>What Drives Us</h3>
+        <div class="mission-list">
+          <div>Deliver fast, reliable, cost-effective repair services</div>
+          <div>Provide custom-built high-performance systems</div>
+          <div>Build scalable networks, hosting, and cloud solutions</div>
+          <div>Empower businesses with IT support and security</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-sec">
+    <span class="sec-label">THE TEAM</span>
+    <h2 class="sec-h2">Meet Our Expert</h2>
+    <p class="sec-sub">Certified professionals with years of experience in IT and cybersecurity.</p>
+    
+    <div class="team-card">
+      <div class="team-left">
+        <div class="team-avatar"></div>
+        <span class="team-role">CEO & CTO</span>
+      </div>
+      <div class="team-right">
+        <h3>Expert Leader</h3>
+        <p>CEO & CTO</p>
+        <div class="tags">
+          <span class="tag">Offensive Security</span>
+          <span class="tag">VAPT</span>
+          <span class="tag">IT Infrastructure</span>
+          <span class="tag">AI/ML</span>
+          <span class="tag">System Architecture</span>
+          <span class="tag">Network Security</span>
+        </div>
+        <div class="cert-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          CIOSE Certified
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="content-sec">
+    <span class="sec-label">PRICING</span>
+    <h2 class="sec-h2">Get Instant Price Estimate</h2>
+    <p class="sec-sub">Transparent pricing — no hidden costs. Select services to see your estimate.</p>
+    
+    <div class="calc-layout">
+      <!-- Left: Service Selector -->
+      <div>
+        <div class="cat-filters" id="cat-filters">
+          <button class="cat-btn active" data-cat="All">All</button>
+          <button class="cat-btn" data-cat="Repair">Repair</button>
+          <button class="cat-btn" data-cat="Build">Build</button>
+          <button class="cat-btn" data-cat="Network">Network</button>
+          <button class="cat-btn" data-cat="Security">Security</button>
+          <button class="cat-btn" data-cat="Cloud">Cloud</button>
+          <button class="cat-btn" data-cat="Enterprise">Enterprise</button>
+        </div>
+        
+        <div class="urgency-label">Service Urgency</div>
+        <div class="urgency-grid">
+          <div class="urgency-card selected" data-mult="1.0" data-urgency="Normal">
+            <svg class="urgency-icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <div class="urgency-name">Normal</div>
+            <div class="urgency-time">Standard delivery</div>
+            <div class="urgency-badge">1x price</div>
+          </div>
+          <div class="urgency-card" data-mult="1.5" data-urgency="Express">
+            <svg class="urgency-icon" viewBox="0 0 24 24">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+            <div class="urgency-name">Express</div>
+            <div class="urgency-time">Priority handling</div>
+            <div class="urgency-badge">1.5x price</div>
+          </div>
+          <div class="urgency-card" data-mult="2.0" data-urgency="Emergency">
+            <svg class="urgency-icon" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <div class="urgency-name">Emergency</div>
+            <div class="urgency-time">Drop everything now</div>
+            <div class="urgency-badge">2x price</div>
+          </div>
+        </div>
+
+        <div class="svc-list" id="svc-list">
+          <!-- Services rendered via JS -->
+        </div>
+      </div>
+      
+      <!-- Right: Price Summary Card -->
+      <div>
+        <div class="calc-summary">
+          <h3>Price Summary</h3>
+          
+          <div class="calc-empty" id="calc-empty">
+            <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2" stroke="currentColor" stroke-width="2" fill="none"></rect><line x1="8" y1="6" x2="16" y2="6" stroke="currentColor" stroke-width="2"></line><line x1="16" y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="12" y1="14" x2="12" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="8" y1="14" x2="8" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="16" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="12" y1="10" x2="12" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="8" y1="10" x2="8" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="16" y1="18" x2="16" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="12" y1="18" x2="12" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line><line x1="8" y1="18" x2="8" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line></svg>
+            <p>Select services to<br>see your estimate</p>
+          </div>
+          
+          <div class="calc-active" id="calc-active">
+            <div class="sel-list" id="sel-list">
+              <!-- Selected items rendered via JS -->
+            </div>
+            
+            <div class="calc-totals">
+              <div class="calc-row">
+                <span class="calc-sub">Base Price</span>
+                <span class="calc-sub" id="calc-subtotal">₹0</span>
+              </div>
+              <div class="calc-row" id="calc-urgency-row" style="display: none; margin-top: 4px;">
+                <span class="calc-sub" id="calc-urgency-label" style="font-size: 13px; color: var(--text-muted);">Urgency</span>
+                <span class="calc-sub" id="calc-urgency-val" style="font-size: 13px; color: var(--text-muted);">+₹0</span>
+              </div>
+              <div class="calc-note" style="margin-top: 8px;">* Final price may vary based on parts and complexity</div>
+              <div class="calc-row" style="margin-top: 8px; border-top: 1px solid var(--border); padding-top: 16px;">
+                <span style="font-family: var(--font-head); font-weight: 700; font-size: 16px;">Estimated Total</span>
+                <span class="calc-tot" id="calc-total">₹0</span>
+              </div>
+              <div class="calc-row">
+                <span style="font-size: 13px; color: var(--text-muted);">Estimated Duration</span>
+                <span class="calc-dur" id="calc-duration">-</span>
+              </div>
+            </div>
+            
+            <div class="calc-btns">
+              <button class="btn-book" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book This Service &rarr;</button>
+              <button class="btn-wa" id="btn-wa-quote">WhatsApp Quote</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-sec">
+    <div class="testi-card">
+      <div class="quote-mark">"</div>
+      <p class="testi-text">TechnoFixer fixed our entire office network setup in a single day. Professional, fast, and reliable. Highly recommended for any business in Ahmedabad.</p>
+      <div class="testi-author">
+        <div class="testi-av">SC</div>
+        <div>
+          <div class="testi-name">Satisfied Client, Ahmedabad</div>
+          <div class="testi-role">Business Owner</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="content-sec">
+    <div class="two-col">
+      <div>
+        <span class="sec-label">GET IN TOUCH</span>
+        <h2 class="sec-h2">Let's Fix Your Tech</h2>
+        <p class="sec-sub">Ready to upgrade your IT or need an emergency repair? We respond fast.</p>
+        
+        <div class="contact-info">
+          <div class="c-row">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <div>
+              <div class="c-lbl">Phone</div>
+              <div class="c-val"><a href="tel:+919265627252">+91 9265627252</a></div>
+              <div class="c-sub">Emergency Hotline Available 24/7</div>
+            </div>
+          </div>
+          <div class="c-row">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <div>
+              <div class="c-lbl">Email</div>
+              <div class="c-val"><a href="mailto:officialtechnofixer@gmail.com">officialtechnofixer@gmail.com</a></div>
+              <div class="c-sub">We respond within 2 hours</div>
+            </div>
+          </div>
+          <div class="c-row">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <div>
+              <div class="c-lbl">Location</div>
+              <div class="c-val">Ahmedabad, Gujarat, India</div>
+              <div class="c-sub">Serving clients across Gujarat</div>
+            </div>
+          </div>
+          <div class="c-row">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <div>
+              <div class="c-lbl">Hours</div>
+              <div class="c-val">Mon–Sat: 9:00 AM – 8:00 PM</div>
+              <div class="c-sub">Emergency support available 24/7</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-form">
+        <div class="form-group">
+          <input type="text" placeholder="Your Name" required>
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Your Email" required>
+        </div>
+        <div class="form-group">
+          <input type="tel" placeholder="Your Phone" required>
+        </div>
+        <div class="form-group">
+          <select required>
+            <option value="" disabled selected>Select Service Type</option>
+            <option value="Computer Repair">Computer Repair</option>
+            <option value="Custom PC Build">Custom PC Build</option>
+            <option value="Network Setup">Network Setup</option>
+            <option value="Cybersecurity Audit">Cybersecurity Audit</option>
+            <option value="Data Recovery">Data Recovery</option>
+            <option value="Software Installation">Software Installation</option>
+            <option value="Enterprise Solutions">Enterprise Solutions</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <textarea placeholder="Your Message" required></textarea>
+        </div>
+        <button class="btn-submit">Send Message &rarr;</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-banner">
+    <div class="cta-glow"></div>
+    <span class="sec-label">GET STARTED TODAY</span>
+    <h2>Ready to Fix Your IT?</h2>
+    <p>Get a free consultation. Same-day service available.</p>
+    <div class="cta-btns">
+      <button class="btn-cta-p" onclick="window.location.href='tel:+919265627252'">Call Now — +91 9265627252</button>
+      <button class="btn-cta-o" onclick="window.open('https://wa.me/919265627252','_blank')">WhatsApp Us</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="ft-grid">
+      <div>
+        <a href="#" class="ft-logo">TechnoFixer</a>
+        <div class="ft-tag">IT Solutions & Repair Services</div>
+        <div class="c-row" style="margin-top: 24px;">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <div>
+            <div class="c-val"><a href="tel:+919265627252">+91 9265627252</a></div>
+          </div>
+        </div>
+        <div class="c-row" style="margin-top: 12px;">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <div>
+            <div class="c-val"><a href="mailto:officialtechnofixer@gmail.com">officialtechnofixer@gmail.com</a></div>
+          </div>
+        </div>
+      </div>
+      <div class="ft-col">
+        <h4>Quick Links</h4>
+        <div class="ft-links">
+          <a href="#hero">Home</a>
+          <a href="#services">Services</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div class="ft-col">
+        <h4>Services</h4>
+        <div class="ft-links">
+          <a href="#">Computer Repair</a>
+          <a href="#">Custom PC</a>
+          <a href="#">Network Setup</a>
+          <a href="#">Cybersecurity</a>
+          <a href="#">Data Recovery</a>
+          <a href="#">Enterprise IT</a>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <div>&copy; 2025 TechnoFixer. All rights reserved.</div>
+      <div>Ahmedabad, Gujarat, India</div>
+    </div>
+  </footer>
+
+  <a id="wa-btn" href="https://wa.me/919265627252" target="_blank">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- Chatbot -->
+  <div id="chatbot">
+    <button id="chat-toggle">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"></path></svg>
+      <div class="chat-unread" id="chat-unread"></div>
+    </button>
+
+    <div id="chat-window">
+      <div id="chat-header">
+        <div class="chat-avatar">S</div>
+        <div>
+          <div class="chat-name">Saarthi</div>
+          <div class="chat-status">● Online — Ready to help</div>
+        </div>
+        <button id="chat-close">&times;</button>
+      </div>
+
+      <div id="chat-messages">
+        <!-- Messages render here -->
+      </div>
+
+      <div id="chat-quick-replies">
+        <!-- Quick replies render here -->
+      </div>
+
+      <div id="chat-input-row">
+        <input type="text" id="chat-input" placeholder="Ask me anything..." autocomplete="off">
+        <button id="chat-send">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" crossorigin="anonymous"></script>
+
+  <script>
+    // Custom Cursor
+    let mx=0, my=0, rx=0, ry=0;
+    const dot = document.getElementById('cur-dot');
+    const ring = document.getElementById('cur-ring');
+    window.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px';
+      dot.style.top = my + 'px';
+    }, {passive: true});
+    (function loop(){
+      rx += (mx - rx) * 0.08;
+      ry += (my - ry) * 0.08;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+
+    // Lenis + GSAP Init
+    gsap.registerPlugin(ScrollTrigger);
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true
+    });
+    function raf(t) {
+      lenis.raf(t);
+      ScrollTrigger.update();
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Navbar Scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', scrollY > 60);
+    }, {passive: true});
+
+    // Tabs
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      if(tab === 'core') {
+        document.getElementById('tab-core').style.display = 'grid';
+        document.getElementById('tab-ent').style.display = 'none';
+      } else {
+        document.getElementById('tab-core').style.display = 'none';
+        document.getElementById('tab-ent').style.display = 'grid';
+      }
+      ScrollTrigger.refresh();
+    }
+
+    // Three.js
+    const canvas = document.getElementById('c3d');
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 5;
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const geo = new THREE.IcosahedronGeometry(1.5, 1);
+    const matSolid = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const meshSolid = new THREE.Mesh(geo, matSolid);
+    meshSolid.scale.setScalar(0.97);
+    group.add(meshSolid);
+
+    const edges = new THREE.EdgesGeometry(geo);
+    const matWire = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.55 });
+    const meshWire = new THREE.LineSegments(edges, matWire);
+    group.add(meshWire);
+
+    group.position.x = window.innerWidth <= 768 ? -0.4 : -1.4;
+    if(window.innerWidth <= 768) group.scale.setScalar(0.65);
+
+    const pGeo = new THREE.BufferGeometry();
+    const pPos = [];
+    for(let i=0; i<160; i++) {
+      const r = 3.0 * Math.cbrt(Math.random());
+      const theta = Math.random() * 2 * Math.PI;
+      const phi = Math.acos(2 * Math.random() - 1);
+      pPos.push(r * Math.sin(phi) * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta), r * Math.cos(phi));
+    }
+    pGeo.setAttribute('position', new THREE.Float32BufferAttribute(pPos, 3));
+    const pMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.016, transparent: true, opacity: 0.3, sizeAttenuation: true });
+    const particles = new THREE.Points(pGeo, pMat);
+    scene.add(particles);
+
+    function resize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      group.position.x = window.innerWidth <= 768 ? -0.4 : -1.4;
+      if(window.innerWidth <= 768) group.scale.setScalar(0.65);
+      else group.scale.setScalar(1);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    let time = 0;
+    function animate() {
+      time += 0.016;
+      group.rotation.y += 0.004;
+      group.rotation.x += 0.0008;
+      
+      const baseScale = window.innerWidth <= 768 ? 0.65 : 1;
+      const breath = 1 + Math.sin(time * 1.0) * 0.028;
+      
+      // We'll let ScrollTrigger handle the scale multiplier
+      if(!window.stProgress) window.stProgress = 0;
+      group.scale.setScalar(baseScale * breath * (1 - window.stProgress * 0.5));
+      
+      particles.rotation.y -= 0.001;
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // GSAP Animations
+    window.addEventListener('load', () => {
+      // Hero Entrance
+      const tl = gsap.timeline({delay: 0.15});
+      tl.to('.hero-content', {opacity: 1, duration: 0})
+        .to('.li', {y: 0, duration: 1, ease: 'power4.out', stagger: 0.1})
+        .to('.hrule', {opacity: 1, duration: 0.5, ease: 'power2.out'}, '-=0.3')
+        .to('.hero-content p', {opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'}, '-=0.2')
+        .to('.hbtns', {opacity: 1, y: 0, duration: 0.7, ease: 'power3.out'}, '-=0.3')
+        .to('.hstats', {opacity: 1, y: 0, duration: 0.7, ease: 'power3.out'}, '-=0.3')
+        .to('.scroll-ind', {opacity: 1, duration: 0.5}, '-=0.2');
+
+      // Counters
+      setTimeout(() => {
+        document.querySelectorAll('.snum').forEach(el => {
+          gsap.to({v: 0}, {
+            v: +el.dataset.t, duration: 2, ease: 'power2.out',
+            onUpdate() { el.textContent = Math.round(this.targets()[0].v); }
+          });
+        });
+      }, 1200);
+
+      // ScrollTrigger for 3D
+      ScrollTrigger.create({
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1.5,
+        onUpdate: self => {
+          const p = self.progress;
+          window.stProgress = p;
+          const baseX = window.innerWidth <= 768 ? -0.4 : -1.4;
+          group.position.x = baseX + p * -2.0;
+          particles.material.opacity = 0.3 * (1 - p);
+        }
+      });
+
+      // Global Scroll Animations
+      gsap.utils.toArray('.sec-h2, .sec-label, .sec-sub').forEach(el => {
+        gsap.fromTo(el, {y: 40, opacity: 0}, {
+          y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none', once: true }
+        });
+      });
+
+      gsap.utils.toArray('.srv-card').forEach(el => {
+        gsap.to(el, {
+          y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none', once: true }
+        });
+      });
+
+      gsap.utils.toArray('.proc-card').forEach((el, i) => {
+        gsap.to(el, {
+          x: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: i * 0.15,
+          scrollTrigger: { trigger: '.proc-cards', start: 'top 80%', toggleActions: 'play none none none', once: true }
+        });
+      });
+
+      gsap.utils.toArray('.ab-card').forEach(el => {
+        gsap.to(el, {
+          y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none', once: true }
+        });
+      });
+
+      // Metric Bars
+      ScrollTrigger.create({
+        trigger: '.metrics-card',
+        start: 'top 80%',
+        once: true,
+        onEnter: () => {
+          document.querySelectorAll('.metric-fill').forEach(el => {
+            gsap.to(el, {width: el.dataset.w + '%', duration: 1.5, ease: 'power3.out'});
+          });
+        }
+      });
+
+      // --- PRICING CALCULATOR LOGIC ---
+      const servicesData = [
+        { id: 'r1', cat: 'Repair', name: 'Computer Diagnostic', price: 299, dur: 'Same day' },
+        { id: 'r2', cat: 'Repair', name: 'Laptop Screen Repair', price: 1500, dur: '1–2 days' },
+        { id: 'r3', cat: 'Repair', name: 'Keyboard Replacement', price: 800, dur: 'Same day' },
+        { id: 'r4', cat: 'Repair', name: 'Battery Replacement', price: 600, dur: 'Same day' },
+        { id: 'r5', cat: 'Repair', name: 'Virus/Malware Removal', price: 499, dur: 'Same day' },
+        { id: 'r6', cat: 'Repair', name: 'Data Recovery', price: 1999, dur: '2–5 days' },
+        { id: 'r7', cat: 'Repair', name: 'OS Installation', price: 499, dur: 'Same day' },
+        { id: 'r8', cat: 'Repair', name: 'Software Setup', price: 299, dur: 'Same day' },
+        
+        { id: 'b1', cat: 'Build', name: 'Budget PC Build', price: 25000, dur: '3–5 days' },
+        { id: 'b2', cat: 'Build', name: 'Gaming PC Build', price: 60000, dur: '5–7 days' },
+        { id: 'b3', cat: 'Build', name: 'Workstation Build', price: 80000, dur: '5–7 days' },
+        { id: 'b4', cat: 'Build', name: 'Component Advice', price: 0, dur: 'Same day' },
+        
+        { id: 'n1', cat: 'Network', name: 'WiFi Setup', price: 999, dur: 'Same day' },
+        { id: 'n2', cat: 'Network', name: 'Mesh Network', price: 2500, dur: '1–2 days' },
+        { id: 'n3', cat: 'Network', name: 'Structured Cabling', price: 4000, dur: '2–4 days' },
+        { id: 'n4', cat: 'Network', name: 'Network Audit', price: 1999, dur: '1–2 days' },
+        
+        { id: 's1', cat: 'Security', name: 'Security Audit', price: 2999, dur: '2–3 days' },
+        { id: 's2', cat: 'Security', name: 'VAPT Assessment', price: 9999, dur: '5–7 days' },
+        { id: 's3', cat: 'Security', name: 'Malware Removal', price: 499, dur: 'Same day' },
+        { id: 's4', cat: 'Security', name: 'Firewall Setup', price: 3999, dur: '1–2 days' },
+        
+        { id: 'c1', cat: 'Cloud', name: 'Microsoft 365 Setup', price: 1999, dur: '1–2 days' },
+        { id: 'c2', cat: 'Cloud', name: 'Google Workspace', price: 1999, dur: '1–2 days' },
+        { id: 'c3', cat: 'Cloud', name: 'Cloud Backup Setup', price: 2499, dur: '1–2 days' },
+        { id: 'c4', cat: 'Cloud', name: 'Remote Work Setup', price: 1499, dur: 'Same day' },
+        
+        { id: 'e1', cat: 'Enterprise', name: 'CCTV Installation', price: 8000, dur: '2–3 days' },
+        { id: 'e2', cat: 'Enterprise', name: 'Biometric Setup', price: 6000, dur: '1–2 days' },
+        { id: 'e3', cat: 'Enterprise', name: 'Server Setup', price: 15000, dur: '3–5 days' },
+        { id: 'e4', cat: 'Enterprise', name: 'IT Consultation', price: 999, dur: 'Same day' }
+      ];
+
+      let urgencyMultiplier = 1.0;
+      let currentUrgency = "Normal";
+
+      document.querySelectorAll('.urgency-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          document.querySelectorAll('.urgency-card').forEach(c => c.classList.remove('selected'));
+          e.currentTarget.classList.add('selected');
+          urgencyMultiplier = parseFloat(e.currentTarget.dataset.mult);
+          currentUrgency = e.currentTarget.dataset.urgency;
+          updateSummary();
+        });
+      });
+
+      let selectedServices = new Set();
+      let currentTotal = 0;
+
+      const svcListEl = document.getElementById('svc-list');
+      const selListEl = document.getElementById('sel-list');
+      const calcEmpty = document.getElementById('calc-empty');
+      const calcActive = document.getElementById('calc-active');
+      const subtotalEl = document.getElementById('calc-subtotal');
+      const totalEl = document.getElementById('calc-total');
+      const durEl = document.getElementById('calc-duration');
+
+      function formatPrice(p) {
+        return p === 0 ? 'Free' : '₹' + p.toLocaleString('en-IN') + (p > 1000 ? '+' : '');
+      }
+
+      function renderServices(filterCat = 'All') {
+        svcListEl.innerHTML = '';
+        servicesData.forEach(s => {
+          if (filterCat !== 'All' && s.cat !== filterCat) return;
+          
+          const isSel = selectedServices.has(s.id);
+          const div = document.createElement('div');
+          div.className = `svc-item ${isSel ? 'selected' : ''}`;
+          div.onclick = () => toggleService(s.id);
+          
+          div.innerHTML = `
+            <div class="svc-check">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div class="svc-info">
+              <div class="svc-name">${s.name}</div>
+              <div class="svc-dur">${s.dur}</div>
+            </div>
+            <div class="svc-price">${formatPrice(s.price)}</div>
+          `;
+          svcListEl.appendChild(div);
+        });
+      }
+
+      function toggleService(id) {
+        if (selectedServices.has(id)) selectedServices.delete(id);
+        else selectedServices.add(id);
+        
+        // Re-render list to update checkboxes
+        const activeCat = document.querySelector('.cat-btn.active').dataset.cat;
+        renderServices(activeCat);
+        updateSummary();
+      }
+
+      function updateSummary() {
+        if (selectedServices.size === 0) {
+          calcEmpty.style.display = 'block';
+          calcActive.classList.remove('show');
+          currentTotal = 0;
+          return;
+        }
+        
+        calcEmpty.style.display = 'none';
+        calcActive.classList.add('show');
+        
+        selListEl.innerHTML = '';
+        let newTotal = 0;
+        let maxDurDays = 0;
+        let hasSameDay = false;
+        
+        selectedServices.forEach(id => {
+          const s = servicesData.find(x => x.id === id);
+          newTotal += s.price;
+          
+          // Parse duration
+          if (s.dur === 'Same day') hasSameDay = true;
+          else {
+            const match = s.dur.match(/(\d+)/g);
+            if (match) {
+              const max = Math.max(...match.map(Number));
+              if (max > maxDurDays) maxDurDays = max;
+            }
+          }
+          
+          const row = document.createElement('div');
+          row.className = 'sel-item';
+          row.innerHTML = `
+            <div class="sel-item-name">
+              <button class="sel-rm" onclick="event.stopPropagation(); toggleService('${s.id}')">&times;</button>
+              ${s.name}
+            </div>
+            <div class="sel-item-price">${formatPrice(s.price)}</div>
+          `;
+          selListEl.appendChild(row);
+        });
+        
+        const baseTotal = newTotal;
+        const finalTotal = Math.round(baseTotal * urgencyMultiplier);
+        const extraAmount = finalTotal - baseTotal;
+        
+        const urgencyRow = document.getElementById('calc-urgency-row');
+        const urgencyLbl = document.getElementById('calc-urgency-label');
+        const urgencyVal = document.getElementById('calc-urgency-val');
+        
+        if (urgencyMultiplier > 1) {
+          urgencyRow.style.display = 'flex';
+          urgencyLbl.textContent = `Urgency (${urgencyMultiplier}x)`;
+        } else {
+          urgencyRow.style.display = 'none';
+        }
+
+        gsap.to({val: currentTotal, valExtra: (window.currentExtra || 0)}, {
+          val: baseTotal,
+          valExtra: extraAmount,
+          duration: 0.5, ease: 'power2.out',
+          onUpdate: function() {
+            const v = Math.round(this.targets()[0].val);
+            const ve = Math.round(this.targets()[0].valExtra);
+            subtotalEl.textContent = '₹' + v.toLocaleString('en-IN');
+            if (urgencyMultiplier > 1) {
+              urgencyVal.textContent = '+₹' + ve.toLocaleString('en-IN');
+            }
+            const ft = v + ve;
+            totalEl.textContent = '₹' + ft.toLocaleString('en-IN') + (ft > 1000 ? '+' : '');
+          }
+        });
+        currentTotal = baseTotal;
+        window.currentExtra = extraAmount;
+        
+        // Update duration text
+        if (maxDurDays > 0) durEl.textContent = `Up to ${maxDurDays} days`;
+        else if (hasSameDay) durEl.textContent = 'Same day';
+        else durEl.textContent = '-';
+      }
+
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          renderServices(e.target.dataset.cat);
+        });
+      });
+
+      document.getElementById('btn-wa-quote').addEventListener('click', () => {
+        if (selectedServices.size === 0) return;
+        let msg = "Hi TechnoFixer, I need a quote for:\n\n";
+        selectedServices.forEach(id => {
+          const s = servicesData.find(x => x.id === id);
+          msg += `- ${s.name}\n`;
+        });
+        const finalTot = Math.round(currentTotal * urgencyMultiplier);
+        msg += `\nUrgency: ${currentUrgency}\nEstimated total shown: ₹${finalTot.toLocaleString('en-IN')}+\nPlease confirm.`;
+        window.open(`https://wa.me/919265627252?text=${encodeURIComponent(msg)}`, '_blank');
+      });
+
+      // Init calculator
+      renderServices('All');
+
+
+      // --- CHATBOT LOGIC ---
+      const chatToggle = document.getElementById('chat-toggle');
+      const chatWindow = document.getElementById('chat-window');
+      const chatClose = document.getElementById('chat-close');
+      const chatMessages = document.getElementById('chat-messages');
+      const chatInput = document.getElementById('chat-input');
+      const chatSend = document.getElementById('chat-send');
+      const chatQuickReplies = document.getElementById('chat-quick-replies');
+      const chatUnread = document.getElementById('chat-unread');
+      
+      let chatOpened = false;
+      let isTyping = false;
+
+      // Show unread indicator after 5s if not opened
+      setTimeout(() => {
+        if (!chatOpened) chatUnread.classList.add('show');
+      }, 5000);
+
+      chatToggle.addEventListener('click', () => {
+        chatWindow.classList.toggle('open');
+        chatUnread.classList.remove('show');
+        if (!chatOpened) {
+          chatOpened = true;
+          showTyping();
+          setTimeout(() => {
+            removeTyping();
+            addBotMessage("Hi! I'm Saarthi, TechnoFixer's assistant.\nHow can I help you today? 👋");
+            setQuickReplies([
+              "What services do you offer?",
+              "How much does repair cost?",
+              "Where are you located?",
+              "Book a service",
+              "Talk to a human"
+            ]);
+          }, 600);
+        }
+      });
+
+      chatClose.addEventListener('click', () => chatWindow.classList.remove('open'));
+
+      function addMessage(text, sender) {
+        const div = document.createElement('div');
+        div.className = `msg ${sender}`;
+        div.textContent = text;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function addBotMessage(text) { addMessage(text, 'bot'); }
+      function addUserMessage(text) { addMessage(text, 'user'); }
+
+      function showTyping() {
+        if (isTyping) return;
+        isTyping = true;
+        const div = document.createElement('div');
+        div.className = 'msg bot typing-msg';
+        div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function removeTyping() {
+        const t = document.querySelector('.typing-msg');
+        if (t) t.remove();
+        isTyping = false;
+      }
+
+      function setQuickReplies(replies) {
+        chatQuickReplies.innerHTML = '';
+        replies.forEach(r => {
+          const btn = document.createElement('button');
+          btn.className = 'qr-btn';
+          btn.textContent = r;
+          btn.onclick = () => handleUserInput(r);
+          chatQuickReplies.appendChild(btn);
+        });
+      }
+
+      function handleUserInput(text) {
+        if (!text.trim() || isTyping) return;
+        addUserMessage(text);
+        chatInput.value = '';
+        chatQuickReplies.innerHTML = '';
+        
+        showTyping();
+        setTimeout(() => {
+          removeTyping();
+          processBotResponse(text.toLowerCase());
+        }, 700);
+      }
+
+      chatSend.addEventListener('click', () => handleUserInput(chatInput.value));
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleUserInput(chatInput.value);
+      });
+
+      function processBotResponse(input) {
+        let reply = "";
+        let qrs = [];
+
+        // Action triggers
+        if (input === "call +91 9265627252" || input === "call now" || input === "call us" || input === "call urgently") {
+          addBotMessage("Connecting you now! 📞");
+          window.location.href = 'tel:+919265627252';
+          setQuickReplies(["See all services"]);
+          return;
+        }
+        if (input === "whatsapp us" || input === "whatsapp" || input === "whatsapp for quote") {
+          addBotMessage("Opening WhatsApp now! 💬");
+          window.open('https://wa.me/919265627252', '_blank');
+          setQuickReplies(["See all services"]);
+          return;
+        }
+        if (input === "fill contact form" || input === "book now" || input === "book a service" || input === "book network setup" || input === "book data recovery") {
+          addBotMessage("Scrolling to the contact form...");
+          document.getElementById('contact').scrollIntoView({behavior: 'smooth'});
+          chatWindow.classList.remove('open');
+          return;
+        }
+        if (input === "see calculator" || input === "get price" || input === "get vapt quote" || input === "get enterprise quote") {
+          addBotMessage("Scrolling to the Price Calculator...");
+          document.getElementById('pricing').scrollIntoView({behavior: 'smooth'});
+          chatWindow.classList.remove('open');
+          return;
+        }
+        if (input === "get directions") {
+          addBotMessage("Opening Google Maps...");
+          window.open('https://maps.google.com/?q=Ahmedabad,+Gujarat', '_blank');
+          setQuickReplies(["Call us", "WhatsApp"]);
+          return;
+        }
+        if (input === "see all services") {
+          addBotMessage("Scrolling to our services...");
+          document.getElementById('services').scrollIntoView({behavior: 'smooth'});
+          chatWindow.classList.remove('open');
+          return;
+        }
+
+        // Keyword matching
+        if (input.includes('service') || input.includes('offer')) {
+          reply = "We offer computer & laptop repair, custom PC building, network setup, cybersecurity audits, data recovery, software installation, and enterprise IT solutions. Which one interests you?";
+          qrs = ["Repair", "PC Build", "Network", "Security", "Enterprise"];
+        }
+        else if (input.includes('repair') || input.includes('laptop') || input.includes('computer')) {
+          reply = "We handle all kinds of computer & laptop repairs — screen replacement, keyboard, battery, diagnostics, and more. Starting from ₹299. Want to book a repair?";
+          qrs = ["Book now", "Get price", "Call us"];
+        }
+        else if (input.includes('price') || input.includes('cost') || input.includes('how much') || input.includes('rate')) {
+          reply = "Our prices start from ₹299 for basic diagnostics. You can use our Price Calculator on this page to get an instant estimate for your specific needs!";
+          qrs = ["See calculator", "WhatsApp for quote", "Call us"];
+        }
+        else if (input.includes('location') || input.includes('where') || input.includes('address')) {
+          reply = "We're based in Ahmedabad, Gujarat, India — serving clients across Gujarat. We also offer remote support for software issues!";
+          qrs = ["Get directions", "Call us", "WhatsApp"];
+        }
+        else if (input.includes('time') || input.includes('hours') || input.includes('open')) {
+          reply = "We're open Mon–Sat, 9:00 AM to 8:00 PM. For emergencies, we have 24/7 support available. Call us anytime!";
+          qrs = ["Call now", "WhatsApp"];
+        }
+        else if (input.includes('book') || input.includes('appointment') || input.includes('schedule')) {
+          reply = "Great! You can book a service by calling us, sending a WhatsApp message, or filling our contact form on this page. Which do you prefer?";
+          qrs = ["Call +91 9265627252", "WhatsApp Us", "Fill contact form"];
+        }
+        else if (input.includes('security') || input.includes('vapt') || input.includes('hack') || input.includes('cybersecurity')) {
+          reply = "Our cybersecurity services include VAPT, vulnerability assessment, malware removal, and firewall setup. We're CIOSE certified. Starting from ₹499.";
+          qrs = ["Get VAPT quote", "Learn more", "Call us"];
+        }
+        else if (input.includes('network') || input.includes('wifi') || input.includes('internet')) {
+          reply = "We set up home and office networks, WiFi optimization, mesh systems, and structured cabling. Starting ₹999.";
+          qrs = ["Book network setup", "Get price", "Call us"];
+        }
+        else if (input.includes('data') || input.includes('recovery') || input.includes('lost files')) {
+          reply = "We recover lost files, restore systems, and repair hard drives. Starting ₹1,999. The sooner you act, the better the chances of recovery!";
+          qrs = ["Book data recovery", "Call urgently", "WhatsApp"];
+        }
+        else if (input.includes('enterprise') || input.includes('business') || input.includes('office') || input.includes('cctv')) {
+          reply = "For businesses we offer CCTV setup, biometric locks, server deployment, Microsoft 365, and full IT management. Let's discuss your needs!";
+          qrs = ["Get enterprise quote", "Call us", "WhatsApp"];
+        }
+        else if (input.includes('human') || input.includes('agent') || input.includes('talk') || input.includes('person')) {
+          reply = "Of course! You can reach our team directly:\n\n📞 +91 9265627252\n📧 officialtechnofixer@gmail.com\n⏰ Mon–Sat 9AM–8PM, 24/7 emergency";
+          qrs = ["Call now", "WhatsApp"];
+        }
+        else if (input.includes('call')) {
+          reply = "Connecting you now! 📞";
+          window.location.href = 'tel:+919265627252';
+          qrs = ["See all services"];
+        }
+        else if (input.includes('whatsapp')) {
+          reply = "Opening WhatsApp now! 💬";
+          window.open('https://wa.me/919265627252', '_blank');
+          qrs = ["See all services"];
+        }
+        else {
+          reply = "I'm not sure about that, but our team can definitely help! Reach us at +91 9265627252 or WhatsApp us for a quick response.";
+          qrs = ["Call us", "WhatsApp", "See all services"];
+        }
+
+        addBotMessage(reply);
+        setQuickReplies(qrs);
+      }
+
+    });
+  </script>
+</body>
+</html>
