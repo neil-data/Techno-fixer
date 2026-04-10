@@ -381,15 +381,13 @@ export default function Page() {
     entranceTl.to(canvasRef.current, { opacity: 1, duration: 2, ease: "power2.inOut" }, 0);
 
     if (heroContentRef.current && h1Ref.current) {
-      const badge = heroContentRef.current.querySelector('.hero-badge');
       const h1Spans = h1Ref.current.querySelectorAll('span');
       const rule = heroContentRef.current.querySelector('.hero-rule');
       const desc = heroContentRef.current.querySelector('.hero-desc');
       const btns = heroContentRef.current.querySelector('.hero-btns');
       const stats = heroContentRef.current.querySelector('.hero-stats');
 
-      entranceTl.fromTo(badge, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.4)
-        .fromTo(h1Spans, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }, 0.6)
+      entranceTl.fromTo(h1Spans, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }, 0.4)
         .fromTo(rule, { opacity: 0, width: 0 }, { opacity: 1, width: 48, duration: 0.8, ease: "power3.out" }, 0.8)
         .fromTo(desc, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 1.0)
         .fromTo(btns, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 1.2)
@@ -664,7 +662,7 @@ export default function Page() {
           </div>
           <button 
             onClick={(e) => handleNavClick(e as any, '#contact')}
-            className="hidden md:block bg-transparent border border-white/20 hover:bg-white hover:text-black text-white px-[20px] py-[7px] rounded-[6px] font-inter font-[400] text-[13px] transition-colors duration-200 ease-in-out"
+            className="hidden md:block bg-transparent border border-white/20 hover:bg-white hover:text-black text-white px-5 py-2 rounded-md font-inter font-normal text-sm transition-colors duration-200 ease-in-out"
           >
             Get Quote
           </button>
@@ -693,7 +691,7 @@ export default function Page() {
           ))}
           <button 
             onClick={(e) => handleNavClick(e as any, '#contact')}
-            className="mt-8 bg-[#FFFFFF] hover:bg-[#E0E0E0] text-[#000000] px-[32px] py-[16px] rounded-[6px] font-space font-[600] text-[18px] transition-colors duration-200 ease-in-out"
+            className="mt-8 bg-[#FFFFFF] hover:bg-[#E0E0E0] text-[#000000] px-8 py-4 rounded-md font-space font-semibold text-lg transition-colors duration-200 ease-in-out"
           >
             Get Quote
           </button>
@@ -708,28 +706,23 @@ export default function Page() {
         
         <div className="max-w-7xl mx-auto px-6 w-full flex items-center relative z-10">
           <div ref={heroContentRef} className="w-full md:w-[55%] ml-auto flex flex-col items-start justify-center will-change-transform">
-            <div className="hero-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/15 mb-4 opacity-0">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-              <span className="text-[12px] text-white/60 font-inter">Trusted IT Partner Since 2018</span>
-            </div>
-            
-            <h1 ref={h1Ref} className="font-space text-[clamp(2rem,5vw,4rem)] font-[800] leading-[0.95] tracking-[-2px] mb-4">
-              <span className="block opacity-0">We Fix.</span>
-              <span className="block opacity-0">We Build.</span>
-              <span className="block opacity-0">We Protect.</span>
+            <h1 ref={h1Ref} className="font-space text-[clamp(3.5rem,7vw,5.5rem)] font-extrabold leading-[1.1] tracking-[-0.02em] mb-6 group cursor-default">
+              <span className="block text-white transition-colors duration-500 hover:text-white">We Fix.</span>
+              <span className="block text-white/90 transition-colors duration-500 hover:text-white relative z-10">We Build.</span>
+              <span className="block bg-clip-text text-transparent bg-gradient-to-br from-white via-white/80 to-white/20 transition-all duration-500 relative z-20">We Protect.</span>
             </h1>
             
-            <div className="w-12 h-[1px] bg-white/20 my-4 opacity-0 hero-rule"></div>
+            <div className="w-20 h-[2px] bg-gradient-to-r from-white to-transparent my-8 hero-rule"></div>
 
-            <p className="hero-desc text-white/50 text-[16px] max-w-[420px] leading-[1.6] font-[300] font-inter opacity-0">
+            <p className="hero-desc text-white/60 text-lg max-w-[480px] leading-relaxed font-light font-inter mb-10">
               Professional IT Solutions for businesses that can&apos;t afford to slow down.
             </p>
             
-            <div className="hero-btns flex flex-col sm:flex-row gap-3 mt-6 w-full sm:w-auto opacity-0">
-              <button className="bg-[#FFFFFF] hover:bg-[#E0E0E0] text-[#000000] px-[26px] py-[13px] rounded-[6px] font-space font-[600] text-[14px] transition-colors duration-200 ease-in-out flex items-center justify-center gap-2 w-full sm:w-auto">
+            <div className="hero-btns flex flex-col sm:flex-row gap-3 mt-6 w-full sm:w-auto">
+              <button className="bg-[#FFFFFF] hover:bg-[#E0E0E0] text-[#000000] px-6 py-3 rounded-md font-space font-semibold text-sm transition-colors duration-200 ease-in-out flex items-center justify-center gap-2 w-full sm:w-auto">
                 Our Services <ArrowRight className="w-4 h-4" />
               </button>
-              <button className="bg-transparent border border-white/40 hover:border-white text-[rgba(255,255,255,0.9)] px-[26px] py-[13px] rounded-[6px] font-space font-[400] text-[14px] transition-colors duration-200 ease-in-out w-full sm:w-auto">
+              <button className="bg-transparent border border-white/40 hover:border-white text-[rgba(255,255,255,0.9)] px-6 py-3 rounded-md font-space font-normal text-sm transition-colors duration-200 ease-in-out w-full sm:w-auto">
                 Free Consultation
               </button>
             </div>

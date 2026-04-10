@@ -1,14 +1,17 @@
 @import "tailwindcss";
 
 @theme {
+  /* Colors */
   --color-bg: #000000;
   --color-surface: #0A0A0A;
   --color-border: rgba(255, 255, 255, 0.08);
   --color-accent: #FFFFFF;
   --color-text-main: #FFFFFF;
   --color-text-muted: rgba(255, 255, 255, 0.45);
-  --font-inter: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-space: var(--font-space), ui-sans-serif, system-ui, sans-serif;
+  
+  /* Fonts */
+  --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-space: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
